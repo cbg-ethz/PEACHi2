@@ -27,19 +27,22 @@ shinyUI(navbarPage(title="PEACHi2", inverse=TRUE,
                                             tags$br(),
                                             actionButton("select2", "Submit"),
                                             tags$hr(style="background-color: black; height: 1px; border: 0;"),
+                                            strong("Download displayed data table:"),
+                                            tags$br(),
+                                            tags$br(),
                                             downloadButton('downloadData', 'Download data table')
                               ),
                               mainPanel(
                                 plotOutput(outputId = "timeSeries"),
                                 tabsetPanel(id = "data_tabs",
                                             tabPanel('RNA',
-                                                     tabsetPanel(
+                                                     tabsetPanel( id = "tabs_rna",
                                                        tabPanel("Normalized HIV/Mock ratios", DT::dataTableOutput("rna_tab"), value = 1),
                                                        tabPanel("Normalized read counts (M=Mock, H=HIV)", DT::dataTableOutput("rna_count_tab"), value = 2)
                                                      )
                                             ),
                                             tabPanel('Protein',
-                                                     tabsetPanel(
+                                                     tabsetPanel( id = "tabs_prot",
                                                        tabPanel("Normalized HIV/Mock ratios", DT::dataTableOutput("protein_tab"), value = 1),
                                                        tabPanel("Peptide counts", DT::dataTableOutput("prot_count_tab"), value = 2)
                                                      )
@@ -50,7 +53,8 @@ shinyUI(navbarPage(title="PEACHi2", inverse=TRUE,
                               )
                             )
                    ),
-                   tabPanel("Help"
+                   tabPanel("Help",
+                        img(src="PEACHi_help.jpg", style="float:center", height = 235.75089*2.5, width = 741.52722*2.5 ) 
                    ),
                    tabPanel("About"
                    )

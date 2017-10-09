@@ -36,9 +36,9 @@ shinyServer(function(input, output,session) {
   observeEvent(input$select1, {
     # clear gene list and remove selected rows
     updateTextInput(session, "list_genes", value = "")
-    proxy_rna_tab %>% selectRows(NULL)
-    proxy_prot_tab %>% selectRows(NULL)
-    proxy_phospho_tab %>% selectRows(NULL)
+    proxy_rna_tab %>% selectRows(list()) #selectRows(NULL)
+    proxy_prot_tab %>% selectRows(list()) #selectRows(NULL)
+    proxy_phospho_tab %>% selectRows(list()) #selectRows(NULL)
     # pharse the radio buttons labels
     rna_choice = strsplit(input$rna_choice," ")[[1]][1]
     prot_choice = strsplit(input$prot_choice," ")[[1]][1]
@@ -102,12 +102,17 @@ shinyServer(function(input, output,session) {
   
   # Download data tables
   output$downloadData <- downloadHandler(
-    filename = function() { "Data.csv" },
+    filename = function() {paste("Data_",input$data_tabs,".csv",sep="")},
     content = function(file) {
-      if (input$data_tabs == "RNA") {
+      if (input$data_tabs == "RNA" && input$tabs_rna == 1) {
+        filename = function() { "Data_RNA_FC.csv" }
         write.csv(data_from_table$rna_tab, file)
-      } else if (input$data_tabs == "Protein") {
+      } else if (input$data_tabs == "RNA" && input$tabs_rna == 2) {
+          write.csv(data_from_table$rna_count_tab, file)
+      } else if (input$data_tabs == "Protein" && input$tabs_prot == 1) {
         write.csv(data_from_table$prot_tab, file)
+      } else if (input$data_tabs == "Protein" && input$tabs_prot == 2) {
+          write.csv(data_from_table$prot_count_tab, file)
       } else if (input$data_tabs == "Phosphoprotein") {
         write.csv(data_from_table$phospho_tab, file)
       }
